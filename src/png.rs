@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::BufWriter;
+use immo::png::Png;
 use crate::{DrawTarget, ISurface, Surface};
 
 pub struct PngSurface {
@@ -31,33 +32,25 @@ impl ISurface for PngSurface {
 
         let mut writer = encoder.write_header().unwrap();
 
-        let mut data:Vec<u8> = vec![];
+
+        let mut png = Png::new(self.width, self.height);
 
         for i in target {
             match i {
                 DrawTarget::Clear(color) => {
-                    let (r,g,b,a) = (*color).into();
-                    for i in 0..(self.width*self.height) {
-                        data.push(r);
-                        data.push(g);
-                        data.push(b);
-                        data.push(a);
-                    }
+                    png.clear((*color).into());
                 }
                 DrawTarget::DrawPoint(x,y,color) => {
-                    let (r,g,b,a) = (*color).into();
-                    let (x,y) = (*x,*y);
+                    png.point(*x,*y,(*color).into()).unwrap();
+                }
 
-                    let index = ((x+y*self.width)*4) as usize;
-                    data[index] = r;
-                    data[index + 1] = g;
-                    data[index + 2] = b;
-                    data[index + 3] = a;
+                DrawTarget::DrawRectangle(x,y,width,height,thickness,color) => {
+                    png.draw_rectangle(*x,*y,*width,*height,*thickness,(*color).into()).unwrap();
                 }
             }
         }
 
-        writer.write_image_data(&data).unwrap();
+        writer.write_image_data(png.as_slice()).unwrap();
 
     }
 }

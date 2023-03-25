@@ -25,7 +25,8 @@ trait ISurface {
 
 enum DrawTarget {
     Clear(Color),
-    DrawPoint(u32,u32,Color)
+    DrawPoint(u32,u32,Color),
+    DrawRectangle(u32,u32,u32,u32,u32,Color)
 }
 
 pub struct Azusa {
@@ -54,6 +55,10 @@ impl Azusa {
 
     pub fn draw_point(&self,color: Color) {
         self.target.borrow_mut().push(DrawTarget::DrawPoint(*self.x.borrow_mut(), *self.y.borrow_mut(), color));
+    }
+
+    pub fn draw_rectangle(&self,color: Color,x:u32,y:u32,width:u32,height:u32,thickness:u32) {
+        self.target.borrow_mut().push(DrawTarget::DrawRectangle(*self.x.borrow_mut(), *self.y.borrow_mut(),width,height,thickness,color));
     }
 
     pub fn flush(&self,surface: Surface) {
