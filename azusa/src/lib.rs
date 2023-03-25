@@ -2,6 +2,7 @@ pub mod png;
 
 use std::cell::RefCell;
 
+#[repr(C)]
 #[derive(Clone,Copy,Debug,PartialEq)]
 pub enum Color {
     Rgba(u8,u8,u8,u8)
@@ -15,6 +16,7 @@ impl Into<(u8,u8,u8,u8)> for Color {
     }
 }
 
+#[repr(C)]
 pub struct Surface {
     pub(crate) surface: Box<dyn ISurface>
 }
@@ -23,12 +25,14 @@ trait ISurface {
     fn draw(&self,target: &mut Vec<DrawTarget>);
 }
 
+#[repr(C)]
 enum DrawTarget {
     Clear(Color),
     DrawPoint(u32,u32,Color),
     DrawRectangle(u32,u32,u32,u32,u32,Color)
 }
 
+#[repr(C)]
 pub struct Azusa {
     x: RefCell<u32>,
     y: RefCell<u32>,
@@ -57,11 +61,11 @@ impl Azusa {
         self.target.borrow_mut().push(DrawTarget::DrawPoint(*self.x.borrow_mut(), *self.y.borrow_mut(), color));
     }
 
-    pub fn draw_rectangle(&self,color: Color,x:u32,y:u32,width:u32,height:u32,thickness:u32) {
+    pub fn draw_rectangle(&self,color: Color,width:u32,height:u32,thickness:u32) {
         self.target.borrow_mut().push(DrawTarget::DrawRectangle(*self.x.borrow_mut(), *self.y.borrow_mut(),width,height,thickness,color));
     }
 
-    pub fn flush(&self,surface: Surface) {
+    pub fn flush(&self,surface: &Surface) {
         surface.surface.draw(&mut *self.target.borrow_mut());
     }
 }

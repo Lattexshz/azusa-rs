@@ -3,6 +3,7 @@ use std::io::BufWriter;
 use immo::png::Png;
 use crate::{DrawTarget, ISurface, Surface};
 
+#[repr(C)]
 pub struct PngSurface {
     file: String,
     width: u32,
@@ -23,6 +24,7 @@ impl PngSurface {
 
 impl ISurface for PngSurface {
     fn draw(&self, target: &mut Vec<DrawTarget>) {
+        println!("Width: {}, Height: {}",self.width,self.height);
         let file = File::create(&self.file).unwrap();
         let w = &mut BufWriter::new(file);
 
@@ -45,6 +47,7 @@ impl ISurface for PngSurface {
                 }
 
                 DrawTarget::DrawRectangle(x,y,width,height,thickness,color) => {
+                    println!("x: {} y: {}, width: {}, height: {},thickness: {}",x,y,width,height,thickness);
                     png.draw_rectangle(*x,*y,*width,*height,*thickness,(*color).into()).unwrap();
                 }
             }
