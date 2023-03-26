@@ -1,4 +1,5 @@
 mod gdi;
+mod xlib;
 
 use raw_window_handle::{HasRawWindowHandle, RawWindowHandle};
 use crate::{Color, DrawTarget, ISurface, Surface};
@@ -27,7 +28,11 @@ impl WindowSurface {
             RawWindowHandle::UiKit(_) => panic!(""),
             RawWindowHandle::AppKit(_) => panic!(""),
             RawWindowHandle::Orbital(_) => panic!(""),
-            RawWindowHandle::Xlib(_) => panic!(""),
+            RawWindowHandle::Xlib(handle) => {
+                Self {
+                    platform: Box::new(xlib::XLibPlatform::new(handle.window)),
+                }
+            },
             RawWindowHandle::Xcb(_) => panic!(""),
             RawWindowHandle::Wayland(_) => panic!(""),
             RawWindowHandle::Drm(_) => panic!(""),

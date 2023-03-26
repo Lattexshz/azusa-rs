@@ -13,6 +13,7 @@ window = ["raw-window-handle","winapi"]
 [dependencies]
 png = { version = "0.17.7", optional = true }
 immo = { version = "0.1.2", optional = true }
+safex = { git = "https://github.com/Lattexshz/safex", features = ["xlib"], optional = true }
 
 raw-window-handle = { verion = "0.5.1", optional = true }
 
