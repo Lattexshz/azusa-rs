@@ -6,6 +6,7 @@ use std::ffi::c_ulong;
 pub struct XLibPlatform {
     display: Display,
     window: Window,
+    cmap: ColorMap
 }
 
 impl XLibPlatform {
@@ -13,7 +14,8 @@ impl XLibPlatform {
         let display = Display::open(None);
         let screen = Screen::default(&display);
         let window = unsafe { Window::from_raw(&display, &screen, window, Some(())) };
-        Self { display, window }
+        let cmap = ColorMap::default(&display, &screen);
+        Self { display, window, cmap }
     }
 }
 
@@ -26,12 +28,14 @@ impl Platform for XLibPlatform {
     fn clear(&mut self, color: Color) {
         let (r, g, b, a) = color.into();
         let geometry = self.window.get_geometry();
+        let cmap = ColorMap::default(&display, &screen);
+        let color = safex::xlib::Color::from_rgb(&display, &cmap, (r as u16)*257,(g as u16)*257,(b as u16)*257).get_pixel();
         let rect = Rectangle {
             x: 0,
             y: 0,
             width: geometry.width,
             height: geometry.height,
-            pixel: Pixel::from_rgb(r*257, g*257, b*257),
+            pixel: color,
         };
 
         self.window.fill_rectangle(rect);
@@ -47,12 +51,13 @@ impl Platform for XLibPlatform {
         border_color: Color,
     ) {
         let (r, g, b, a) = color.into();
+        let color = safex::xlib::Color::from_rgb(&display, &cmap, (r as u16)*257,(g as u16)*257,(b as u16)*257).get_pixel();
         let rect = Rectangle {
             x,
             y,
             width,
             height,
-            pixel: Pixel::from_rgb(r*257, g*257, b*257),
+            pixel: color,
         };
 
         self.window.fill_rectangle(rect);
