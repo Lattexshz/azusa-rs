@@ -18,7 +18,10 @@ impl XLibPlatform {
 }
 
 impl Platform for XLibPlatform {
-    fn begin(&mut self) {}
+    fn begin(&mut self) {
+        self.window.flush_gc();
+        self.display.flush();
+    }
 
     fn clear(&mut self, color: Color) {
         let (r, g, b, a) = color.into();
@@ -28,7 +31,7 @@ impl Platform for XLibPlatform {
             y: 0,
             width: geometry.width,
             height: geometry.height,
-            pixel: Pixel::from_rgb(r, g, b),
+            pixel: Pixel::from_rgb(r*257, g*257, b*257),
         };
 
         self.window.fill_rectangle(rect);
@@ -49,7 +52,7 @@ impl Platform for XLibPlatform {
             y,
             width,
             height,
-            pixel: Pixel::from_rgb(r, g, b),
+            pixel: Pixel::from_rgb(r*257, g*257, b*257),
         };
 
         self.window.fill_rectangle(rect);

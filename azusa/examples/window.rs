@@ -27,6 +27,7 @@ fn main() {
                 window_id,
             } if window_id == window.id() => control_flow.set_exit(),
             Event::RedrawRequested(_) => {
+                window.request_redraw();
                 azusa.clear(Color::Rgba(255, 255, 255, 255));
                 azusa.flush(&mut surface);
             }
