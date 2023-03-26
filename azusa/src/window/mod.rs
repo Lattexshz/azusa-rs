@@ -6,6 +6,7 @@ use crate::{Color, DrawTarget, ISurface, Surface};
 pub(crate) trait Platform {
     fn begin(&mut self);
     fn clear(&mut self,color: Color);
+    fn fill_rectangle(&mut self,x:u32,y:u32,width:u32,height:u32,color: Color,border_color:Color);
     fn end(&mut self);
 }
 
@@ -61,7 +62,9 @@ impl ISurface for WindowSurface {
                 }
                 DrawTarget::DrawPoint(_, _, _) => {}
                 DrawTarget::DrawRectangle(_, _, _, _, _, _) => {}
-                DrawTarget::FillRectangle(_, _, _, _, _) => {}
+                DrawTarget::FillRectangle(x,y,width,height,color) => {
+                    self.platform.fill_rectangle(*x,*y,*width,*height,*color,*color);
+                }
             }
         }
         self.platform.end();

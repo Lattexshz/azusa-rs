@@ -86,6 +86,20 @@ impl Platform for GDIPlatform {
         }
     }
 
+    fn fill_rectangle(&mut self,x:u32,y:u32,width:u32,height:u32,color: Color,border_color:Color) {
+        unsafe {
+            self.set_color(color,border_color);
+            let rect = RECT {
+                left: x as i32,
+                right: width as i32,
+                top: y as i32,
+                bottom: height as i32,
+            };
+
+            Rectangle(self.hdc, rect.left, rect.top, rect.right, rect.bottom);
+        }
+    }
+
     fn end(&mut self) {
         unsafe {
             BitBlt(

@@ -28,7 +28,6 @@ trait ISurface {
     fn draw(&mut self,target: &mut Vec<DrawTarget>);
 }
 
-#[repr(C)]
 enum DrawTarget {
     Clear(Color),
     DrawPoint(u32,u32,Color),

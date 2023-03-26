@@ -24,7 +24,6 @@ impl PngSurface {
 
 impl ISurface for PngSurface {
     fn draw(&mut self, target: &mut Vec<DrawTarget>) {
-        println!("Width: {}, Height: {}",self.width,self.height);
         let file = File::create(&self.file).unwrap();
         let w = &mut BufWriter::new(file);
 
