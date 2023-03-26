@@ -36,7 +36,6 @@ typedef struct color {
 } Color;
 
 Azusa *azusa_new();
-Surface *azusa_new_image_surface(const char* title,unsigned int width,unsigned int height);
 
 void azusa_move_to(Azusa *azusa,u32 x,u32 y);
 

@@ -26,15 +26,6 @@ pub extern "C" fn azusa_new() -> *mut Azusa {
 }
 
 #[no_mangle]
-pub extern "C" fn azusa_new_image_surface(file_name: *const c_char,width:u32,height:u32) -> *mut Surface {
-    unsafe {
-        let surface = PngSurface::new(CStr::from_ptr(file_name).to_str().unwrap(),width,height);
-        let box_suface = Box::new(surface);
-        Box::into_raw(box_suface)
-    }
-}
-
-#[no_mangle]
 pub extern "C" fn azusa_move_to(azusa: *mut Azusa,x: u32,y: u32) {
     unsafe {
         let azusa = &*azusa;
@@ -70,7 +61,7 @@ pub extern "C" fn azusa_draw_rectangle(azusa: *mut Azusa,color: Color,width:u32,
 pub extern "C" fn azusa_flush(azusa: *mut Azusa,surface: *mut Surface) {
     unsafe {
         let azusa = &*azusa;
-        let surface = &*surface;
-        azusa.flush(surface);
+        let mut surface = &mut *surface;
+        azusa.flush(&mut surface);
     }
 }

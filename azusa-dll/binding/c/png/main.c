@@ -1,4 +1,5 @@
-#include "azusa.h"
+#include "azusa/Azusa"
+#include "azusa/PNG"
 
 int main() {
     Azusa *azusa = azusa_new();

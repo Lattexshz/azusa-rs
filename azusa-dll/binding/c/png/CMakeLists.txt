@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.13)
+project(png_example)
+include_directories(../include)
+link_directories(../../../../target/debug)
+add_executable(png_example main.c)
+target_link_libraries(png_example azusa azusa_image azusa_window)

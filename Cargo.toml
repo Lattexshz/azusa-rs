@@ -1,5 +1,8 @@
 [workspace]
 members = [
     "azusa",
-    "azusa-dll"
+
+    "azusa-dll/azusa-base",
+    "azusa-dll/azusa-image",
+    "azusa-dll/azusa-window"
 ]

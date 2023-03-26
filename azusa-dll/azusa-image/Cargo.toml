@@ -1,0 +1,13 @@
+[package]
+name = "azusa-image"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+name = "azusa_image"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+azusa = { path = "../../azusa", features=["png"] }
+azusa-base = { path = "../azusa-base" }
