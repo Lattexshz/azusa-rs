@@ -28,8 +28,7 @@ impl Platform for XLibPlatform {
     fn clear(&mut self, color: Color) {
         let (r, g, b, a) = color.into();
         let geometry = self.window.get_geometry();
-        let cmap = ColorMap::default(&display, &screen);
-        let color = safex::xlib::Color::from_rgb(&display, &cmap, (r as u16)*257,(g as u16)*257,(b as u16)*257).get_pixel();
+        let color = safex::xlib::Color::from_rgb(&self.display, &self.cmap, (r as u16)*257,(g as u16)*257,(b as u16)*257).get_pixel();
         let rect = Rectangle {
             x: 0,
             y: 0,
@@ -51,7 +50,7 @@ impl Platform for XLibPlatform {
         border_color: Color,
     ) {
         let (r, g, b, a) = color.into();
-        let color = safex::xlib::Color::from_rgb(&display, &cmap, (r as u16)*257,(g as u16)*257,(b as u16)*257).get_pixel();
+        let color = safex::xlib::Color::from_rgb(&self.display, &self.cmap, (r as u16)*257,(g as u16)*257,(b as u16)*257).get_pixel();
         let rect = Rectangle {
             x,
             y,
