@@ -1,10 +1,15 @@
-use std::cell::RefCell;
-use std::ffi::{c_int, c_void};
-use winapi::shared::windef::{DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, HBITMAP, HDC, HGDIOBJ, HWND, RECT};
-use winapi::um::wingdi::{BitBlt, CreateCompatibleBitmap, CreateCompatibleDC, DC_BRUSH, DC_PEN, DeleteDC, DeleteObject, GetStockObject, Rectangle, RGB, SelectObject, SetDCBrushColor, SetDCPenColor, SRCCOPY};
-use winapi::um::winuser::{GetClientRect, GetDC, ReleaseDC, SetProcessDpiAwarenessContext};
-use crate::Color;
 use crate::window::Platform;
+use crate::Color;
+
+use std::ffi::{c_int, c_void};
+use winapi::shared::windef::{
+    DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, HBITMAP, HDC, HGDIOBJ, HWND, RECT,
+};
+use winapi::um::wingdi::{
+    BitBlt, CreateCompatibleBitmap, CreateCompatibleDC, DeleteDC, DeleteObject, GetStockObject,
+    Rectangle, SelectObject, SetDCBrushColor, SetDCPenColor, DC_BRUSH, DC_PEN, RGB, SRCCOPY,
+};
+use winapi::um::winuser::{GetClientRect, GetDC, ReleaseDC, SetProcessDpiAwarenessContext};
 
 pub struct GDIPlatform {
     hwnd: HWND,
@@ -36,22 +41,17 @@ impl GDIPlatform {
                 right: 0,
                 bottom: 0,
             },
-            clear_color: Color::Rgba(0,0,0,255),
+            clear_color: Color::Rgba(0, 0, 0, 255),
         }
     }
 
     #[inline]
     fn set_color(&self, color: Color, border_color: Color) {
         unsafe {
-            let (r,g,b,a) = color.into();
-            SetDCBrushColor(self.hdc, RGB(r,g,b));
-            let (r,g,b,a) = border_color.into();
-            SetDCPenColor(
-                self.hdc,
-                RGB(
-                    r,g,b
-                ),
-            );
+            let (r, g, b, _a) = color.into();
+            SetDCBrushColor(self.hdc, RGB(r, g, b));
+            let (r, g, b, _a) = border_color.into();
+            SetDCPenColor(self.hdc, RGB(r, g, b));
 
             SelectObject(self.hdc, GetStockObject(DC_PEN as c_int));
             SelectObject(self.hdc, GetStockObject(DC_BRUSH as c_int));
@@ -86,9 +86,17 @@ impl Platform for GDIPlatform {
         }
     }
 
-    fn fill_rectangle(&mut self,x:u32,y:u32,width:u32,height:u32,color: Color,border_color:Color) {
+    fn fill_rectangle(
+        &mut self,
+        x: u32,
+        y: u32,
+        width: u32,
+        height: u32,
+        color: Color,
+        border_color: Color,
+    ) {
         unsafe {
-            self.set_color(color,border_color);
+            self.set_color(color, border_color);
             let rect = RECT {
                 left: x as i32,
                 right: width as i32,

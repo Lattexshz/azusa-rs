@@ -1,5 +1,5 @@
-use azusa::{Azusa, Color};
 use azusa::window::WindowSurface;
+use azusa::{Azusa, Color};
 use winit::{
     event::{Event, WindowEvent},
     event_loop::EventLoop,
@@ -26,8 +26,8 @@ fn main() {
                 event: WindowEvent::CloseRequested,
                 window_id,
             } if window_id == window.id() => control_flow.set_exit(),
-            Event::RedrawRequested(_)=> {
-                azusa.clear(Color::Rgba(255,255,255,255));
+            Event::RedrawRequested(_) => {
+                azusa.clear(Color::Rgba(255, 255, 255, 255));
                 azusa.flush(&mut surface);
             }
             _ => (),
