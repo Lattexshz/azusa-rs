@@ -1,4 +1,7 @@
+#[cfg(feature = "png")]
 pub mod png;
+#[cfg(feature = "window")]
+pub mod window;
 
 use std::cell::RefCell;
 
@@ -22,14 +25,15 @@ pub struct Surface {
 }
 
 trait ISurface {
-    fn draw(&self,target: &mut Vec<DrawTarget>);
+    fn draw(&mut self,target: &mut Vec<DrawTarget>);
 }
 
 #[repr(C)]
 enum DrawTarget {
     Clear(Color),
     DrawPoint(u32,u32,Color),
-    DrawRectangle(u32,u32,u32,u32,u32,Color)
+    DrawRectangle(u32,u32,u32,u32,u32,Color),
+    FillRectangle(u32,u32,u32,u32,Color)
 }
 
 #[repr(C)]
@@ -65,7 +69,11 @@ impl Azusa {
         self.target.borrow_mut().push(DrawTarget::DrawRectangle(*self.x.borrow_mut(), *self.y.borrow_mut(),width,height,thickness,color));
     }
 
-    pub fn flush(&self,surface: &Surface) {
+    pub fn fill_rectangle(&self,color: Color,width:u32,height:u32) {
+        self.target.borrow_mut().push(DrawTarget::FillRectangle(*self.x.borrow_mut(), *self.y.borrow_mut(),width,height,color));
+    }
+
+    pub fn flush(&self,surface: &mut Surface) {
         surface.surface.draw(&mut *self.target.borrow_mut());
     }
 }
